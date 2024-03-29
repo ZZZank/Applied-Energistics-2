@@ -46,7 +46,7 @@ public class BasicInventoryTest {
 
     @Test
     void testTypeLimit() {
-        var item = AEItems.ITEM_CELL_1K.asItem();
+        var item = AEItems.ITEM_CELL_1K.get();
         var stack = new ItemStack(item);
         var cell = StorageCells.getCellInventory(stack, null);
         Objects.requireNonNull(cell);
@@ -68,7 +68,7 @@ public class BasicInventoryTest {
 
     @Test
     void testSingleType() {
-        var item = AEItems.ITEM_CELL_1K.asItem();
+        var item = AEItems.ITEM_CELL_1K.get();
         var stack = new ItemStack(item);
         var cell = StorageCells.getCellInventory(stack, null);
         Objects.requireNonNull(cell);
@@ -82,9 +82,9 @@ public class BasicInventoryTest {
 
     @Test
     void testEvenDistribution() {
-        var item = AEItems.ITEM_CELL_1K.asItem();
+        var item = AEItems.ITEM_CELL_1K.get();
         var stack = new ItemStack(item);
-        item.getUpgrades(stack).addItems(new ItemStack(AEItems.EQUAL_DISTRIBUTION_CARD));
+        item.getUpgrades(stack).addItems(AEItems.EQUAL_DISTRIBUTION_CARD.stack());
         var cell = StorageCells.getCellInventory(stack, null);
         Objects.requireNonNull(cell);
 
@@ -111,9 +111,9 @@ public class BasicInventoryTest {
 
     @Test
     void testVoidUpgrade() {
-        var item = AEItems.ITEM_CELL_1K.asItem();
+        var item = AEItems.ITEM_CELL_1K.get();
         var stack = new ItemStack(item);
-        item.getUpgrades(stack).addItems(new ItemStack(AEItems.VOID_CARD));
+        item.getUpgrades(stack).addItems(AEItems.VOID_CARD.stack());
 
         // Setup whitelist
         var allowed = AEItemKey.of(Items.DIAMOND);

@@ -37,7 +37,7 @@ import appeng.core.definitions.AEBlockEntities;
 public class SpatialAnchorMoveStrategy extends DefaultBlockEntityMoveStrategy {
     @Override
     public boolean canHandle(BlockEntityType<?> type) {
-        return type == AEBlockEntities.SPATIAL_ANCHOR;
+        return type == AEBlockEntities.SPATIAL_ANCHOR.get();
     }
 
     @Nullable
