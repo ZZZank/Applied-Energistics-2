@@ -18,6 +18,7 @@
 
 package appeng.items.parts;
 
+import net.minecraft.ResourceLocationException;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -205,9 +206,15 @@ public class FacadeItem extends AEBaseItem implements IFacadeItem, AEToolItem {
             return ItemStack.EMPTY;
         }
 
-        ResourceLocation itemId = new ResourceLocation(nbt.getString(NBT_ITEM_ID));
-        Item baseItem = BuiltInRegistries.ITEM.get(itemId);
+        ResourceLocation itemId;
 
+        try {
+            itemId = new ResourceLocation(nbt.getString(NBT_ITEM_ID));
+        } catch (ResourceLocationException e) {
+            return ItemStack.EMPTY;
+        }
+
+        Item baseItem = BuiltInRegistries.ITEM.get(itemId);
         return new ItemStack(baseItem, 1);
     }
 
