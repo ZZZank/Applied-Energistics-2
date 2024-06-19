@@ -23,12 +23,13 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '6.+', changing: true
         classpath 'org.spongepowered:mixingradle:0.7-SNAPSHOT'
     }
 }
 
 plugins {
+    id 'org.gradle.toolchains.foojay-resolver-convention' version '0.5.0'
     id "maven-publish"
     id "com.diffplug.spotless" version "5.12.4"
     id "com.matthewprenger.cursegradle" version "1.4.0"
@@ -124,12 +125,12 @@ dependencies {
         runtimeOnly fg.deobf("mezz.jei:jei-${jei_minecraft_version}-forge:${jei_version}")
 
         compileOnly "me.shedaniel.cloth:basic-math:0.6.1"
-        compileOnly fg.deobf("dev.architectury:architectury-forge:6.2.46")
+        compileOnly fg.deobf("dev.architectury:architectury-forge:1.32.68")
         compileOnly fg.deobf("me.shedaniel:RoughlyEnoughItems-forge:${project.rei_version}")
     } else if (project.runtime_itemlist_mod == "rei") {
         implementation "me.shedaniel.cloth:basic-math:0.6.1"
-        implementation fg.deobf("me.shedaniel.cloth:cloth-config-forge:8.2.88")
-        implementation fg.deobf("dev.architectury:architectury-forge:6.2.46")
+        implementation fg.deobf("me.shedaniel.cloth:cloth-config-forge:4.17.101")
+        implementation fg.deobf("dev.architectury:architectury-forge:1.32.68")
         implementation fg.deobf("me.shedaniel:RoughlyEnoughItems-forge:${project.rei_version}")
     } else {
         throw new GradleException("Invalid runtime_itemlist_mod value: " + project.runtime_itemlist_mod)
@@ -158,7 +159,7 @@ dependencies {
         compileOnly fg.deobf("curse.maven:jade-324717:${project.jade_file_id}")
     }
 
-    def topDependency = "curse.maven:the-one-probe-245211:3871444"
+    def topDependency = "curse.maven:the-one-probe-245211:3752096"
     if (project.runtime_tooltip_mod == "top") {
         implementation fg.deobf(topDependency)
     } else {
@@ -177,6 +178,11 @@ dependencies {
 
     // Annotation Processors
     annotationProcessor 'org.spongepowered:mixin:0.8.4:processor'
+
+    //jabel, for modern Java Syntax
+    // https://mvnrepository.com/artifact/com.pkware.jabel/jabel-javac-plugin
+    compileOnly 'com.pkware.jabel:jabel-javac-plugin:1.0.1-1'
+    annotationProcessor 'com.pkware.jabel:jabel-javac-plugin:1.0.1-1'
 }
 archivesBaseName = artifact_basename
 
@@ -248,9 +254,12 @@ allprojects {
     // ensure everything uses UTF-8 and not some random codepage chosen by gradle
     compileJava.options.encoding = 'UTF-8'
     tasks.withType(JavaCompile) {
+        sourceCompatibility = 21
+        options.release = 8
+        
         options.encoding = 'UTF-8'
         options.deprecation = false
-        options.compilerArgs << "-Xmaxerrs" << "9999"
+        options.compilerArgs << "-Xmaxerrs" << "9999" << '-parameters'
     }
 }
 
